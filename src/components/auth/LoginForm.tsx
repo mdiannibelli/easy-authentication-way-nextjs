@@ -1,16 +1,12 @@
 'use client';
-import { signup } from '@/actions/signup'
-import { useActionState } from 'react';
 
-const SignupForm = () => {
-    const [state, formAction, pending] = useActionState(signup, undefined);
+import { login } from "@/actions/login";
+import { useActionState } from "react";
+
+export const LoginForm = () => {
+    const [state, formAction, pending] = useActionState(login, undefined);
     return (
         <form action={formAction} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-                <label htmlFor="name" className='text-sm font-medium'>Full name:</label>
-                <input type="text" name="name" className="border-1 border-slate-200 rounded-md py-2 px-4 text-gray-700 select-none outline-none" />
-                {state?.errors?.name && <p className='text-xs text-red-500'>{state.errors.name}</p>}
-            </div>
             <div className="flex flex-col gap-2">
                 <label htmlFor="email" className='text-sm font-medium'>Email:</label>
                 <input type="email" name="email" className="border-1 border-slate-200 rounded-md py-2 px-4 text-gray-700 select-none outline-none" />
@@ -30,19 +26,17 @@ const SignupForm = () => {
                     </div>
                 )}
             </div>
-
+            <p className="text-red-500 text-xs">{state?.message}</p>
             <div>
                 <button
                     disabled={pending}
                     className="bg-black cursor-pointer text-white text-xl py-2 rounded-md px-8 w-full">
-                    {pending ? 'Submitting...' : 'Sign up'}
+                    {pending ? 'Submitting...' : 'Login'}
                 </button>
             </div>
             <a
                 className=" text-black text-sm text-end rounded-md w-full"
-                href="/auth/login">{`Have an account? Log in!`}</a>
+                href="/auth/siginup">{`Don't have an account? Sign up!`}</a>
         </form>
     )
 }
-
-export default SignupForm

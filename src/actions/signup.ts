@@ -1,13 +1,13 @@
 'use server';
 
 import { signupSchema } from "@/schemas/signup.schema";
-import { FormState } from "../../types";
+import type { FormSignupState } from "../../types";
 import bcrypt from 'bcrypt';
 import { db } from "@/config/db/prisma";
 import { createSession } from "@/lib/sessions";
 import { v4 as uuidv4 } from 'uuid';
 
-export async function signup(state: FormState, formData: FormData): Promise<FormState> {
+export async function signup(state: FormSignupState, formData: FormData): Promise<FormSignupState> {
     // 1. Fields validation
     const validationResult = signupSchema.safeParse({
         name: formData.get('name'),
@@ -43,7 +43,7 @@ export async function signup(state: FormState, formData: FormData): Promise<Form
             password: hashedPassword
         }
     });
-    console.log({ user })
+    // console.log({ user })
     // 5. Create a session for the user
     await createSession(user.userId);
 };
