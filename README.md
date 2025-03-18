@@ -10,4 +10,6 @@ First, run the development server, here are the steps:
 
 3. Set all incomplete enviroments in ```.env``` file.
 
-4. Execute ```npm run dev``` to run the project in development mode.
+4. Create the PostgreSQL database ```docker-compose up -d```
+
+5. Execute ```npm run dev``` to run the project in development mode.
