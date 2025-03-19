@@ -1,6 +1,10 @@
 
 import SignupForm from "@/components/auth/SignupForm";
-export default function page() {
+import { verifySession } from "@/lib/sessions";
+import { redirect } from "next/navigation";
+export default async function page() {
+    const session = await verifySession();
+    if (session) redirect("/dashboard");
     return (
         <main className="max-w-7xl mx-auto w-full flex flex-col justify-center items-center">
 
