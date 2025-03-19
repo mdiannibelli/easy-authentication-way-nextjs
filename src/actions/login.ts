@@ -3,9 +3,10 @@ import { loginFormSchema } from "@/schemas/login.schema";
 import type { FormLoginState } from "../../types";
 import { db } from "@/config/db/prisma";
 import bcrypt from 'bcrypt';
+import { createSession } from "@/lib/sessions";
 
 export async function login(state: FormLoginState, formData: FormData): Promise<FormLoginState> {
-    // 1. Validate formData
+    // 1. Fields validation
     const validationResult = loginFormSchema.safeParse({
         email: formData.get('email'),
         password: formData.get('password')
@@ -19,16 +20,16 @@ export async function login(state: FormLoginState, formData: FormData): Promise<
 
     const { email, password } = validationResult.data;
 
-    // 2. Find if there is an existing account with the email received
-    const existingAccount = await db.user.findFirst({ where: { email } });
-    if (!existingAccount) {
+    // 2. Find a user with current email
+    const user = await db.user.findFirst({ where: { email } });
+    if (!user) {
         return {
             message: "There is no account registered with that email."
         }
     }
 
     // 3. Compare passwords and validate
-    const isCorrectPassword = await bcrypt.compare(password, existingAccount.password);
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) {
         return {
             message: 'Incorrect password'
@@ -36,4 +37,5 @@ export async function login(state: FormLoginState, formData: FormData): Promise<
     }
 
     // 4. Create session
+    await createSession(user.userId);
 }

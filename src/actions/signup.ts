@@ -43,7 +43,9 @@ export async function signup(state: FormSignupState, formData: FormData): Promis
             password: hashedPassword
         }
     });
+
     // console.log({ user })
+
     // 5. Create a session for the user
     await createSession(user.userId);
 };
